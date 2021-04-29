@@ -1,0 +1,12 @@
+md5: f8caa1a6a0770ea1ba3acaec0b8a5466
+frozen: true
+deps:
+- path: fashion-mnist/raw
+  repo:
+    url: https://github.com/iterative/dataset-registry
+    rev_lock: ba014f40e29670421a67cb1c47543f402348aa13
+outs:
+- md5: 8a31b1338b609cf1133d1df639de606c.dir
+  size: 30878645
+  nfiles: 4
+  path: raw
