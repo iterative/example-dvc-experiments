@@ -1,0 +1,92 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python3 src/prepare.py
+    deps:
+    - path: data/fashion-mnist/raw/
+      md5: 8a31b1338b609cf1133d1df639de606c.dir
+      size: 30878645
+      nfiles: 4
+    - path: src/prepare.py
+      md5: 2c9ddd60ad065771628c58c618663050
+      size: 3881
+    params:
+      params.yaml:
+        prepare.remix: false
+        prepare.remix_split: 0.2
+        prepare.seed: 20210428
+    outs:
+    - path: data/fashion-mnist/prepared
+      md5: c5095cd3e98121bc8d2bebe27d702ab5.dir
+      size: 54951020
+      nfiles: 2
+  preprocess:
+    cmd: python3 src/preprocess.py
+    deps:
+    - path: data/fashion-mnist/prepared/
+      md5: c5095cd3e98121bc8d2bebe27d702ab5.dir
+      size: 54951020
+      nfiles: 2
+    - path: src/preprocess.py
+      md5: 032b589d131312e9809741ff7e55c0cb
+      size: 2371
+    params:
+      params.yaml:
+        preprocess.add_noise: false
+        preprocess.noise_amount: 0.0004
+        preprocess.noise_s_vs_p: 0.5
+        preprocess.normalize: true
+        preprocess.seed: 20210428
+        preprocess.shuffle: false
+    outs:
+    - path: data/fashion-mnist/preprocessed/
+      md5: 6363cfea01240ea3316d039f407a95cd.dir
+      size: 441841020
+      nfiles: 2
+  train:
+    cmd: python3 src/train.py
+    deps:
+    - path: data/fashion-mnist/preprocessed/
+      md5: 6363cfea01240ea3316d039f407a95cd.dir
+      size: 441841020
+      nfiles: 2
+    - path: src/models.py
+      md5: edfd5004a83c4566f5e237f84df856c2
+      size: 3179
+    - path: src/train.py
+      md5: deccb902635a6003be1b40150ca3982d
+      size: 1990
+    params:
+      params.yaml:
+        model.cnn.conv_kernel_size: 3
+        model.cnn.conv_units: 16
+        model.cnn.dense_units: 128
+        model.cnn.dropout: 0.1
+        model.mlp.activation: relu
+        model.mlp.units: 16
+        model.name: cnn
+        model.optimizer: Adam
+        train.batch_size: 128
+        train.epochs: 1
+        train.seed: 20210428
+        train.validation_split: 0.2
+    outs:
+    - path: logs.csv
+      md5: 3e94a253d81c1d5c77e7950cedb45460
+      size: 599
+    - path: models/fashion-mnist/model.h5
+      md5: 2f3c174bd554ffac5aebf2b2ad42a4fc
+      size: 4220464
+  evaluate:
+    cmd: python3 src/evaluate.py
+    deps:
+    - path: models/fashion-mnist/model.h5
+      md5: 2f3c174bd554ffac5aebf2b2ad42a4fc
+      size: 4220464
+    - path: src/evaluate.py
+      md5: 94e7b58824a9d4c37cf7e931237b9f58
+      size: 730
+    outs:
+    - path: metrics.json
+      md5: 2ab0ea1af6fec4ee6e4ce0af3f2889a5
+      size: 293
