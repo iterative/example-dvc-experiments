@@ -1,0 +1,17 @@
+stages:
+  train:
+    cmd: python3 src/train.py
+    deps:
+    - data/images/
+    - src/train.py
+    params:
+    - model.conv_units
+    - train.epochs
+    outs:
+    - models/model.h5
+    metrics:
+    - metrics.json:
+        cache: false
+    plots:
+    - logs.csv:
+        cache: false
