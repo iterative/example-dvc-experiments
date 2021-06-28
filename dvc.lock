@@ -1,0 +1,26 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python3 src/train.py
+    deps:
+    - path: data/images/
+      md5: 0ebacd64e04c0e4a97d8fa48a4d707e6.dir
+      size: 35401667
+      nfiles: 70000
+    - path: src/train.py
+      md5: 905f9fdc90781e63c6b01035984399cc
+      size: 3463
+    params:
+      params.yaml:
+        model.conv_units: 16
+        train.epochs: 10
+    outs:
+    - path: logs.csv
+      md5: 75185d084adef4339b66050b8e1dfc26
+      size: 865
+    - path: metrics.json
+      md5: e4acbb378efd7c22f09c36eca7bd4219
+      size: 56
+    - path: models/model.h5
+      md5: 23e133c38f8b22b5ba2c5bd45e9e4413
+      size: 8363240
